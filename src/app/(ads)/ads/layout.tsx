@@ -162,6 +162,17 @@ export default function AdsLayout({ children }: { children: React.ReactNode }) {
     (route) => pathname === route || pathname.startsWith(route + "/")
   );
 
+  /* Auth routes (signin + OAuth callback) render STANDALONE — no sidebar, no
+     top bar, no right rail. They're full-screen 2-column layouts of their
+     own (see src/components/auth/SignInForm.tsx) and would be visually broken
+     if embedded inside the dashboard chrome. */
+  const isAuthRoute =
+    pathname === "/ads/signin" || pathname.startsWith("/ads/auth/");
+
+  if (isAuthRoute) {
+    return <div className="min-h-screen bg-white text-neutral-900">{children}</div>;
+  }
+
   return (
     <div className="flex h-screen bg-white text-neutral-900">
       {/* ─── Left Sidebar ─── */}
