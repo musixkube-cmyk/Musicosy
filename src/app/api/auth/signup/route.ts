@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { pgPool } from "@/lib/pg";
-import { requireSupabase } from "@/lib/supabase/guard";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 
 /**
  * POST /api/auth/signup
@@ -37,7 +37,24 @@ import { requireSupabase } from "@/lib/supabase/guard";
  *     409 conflict, we can't accidentally overwrite accounts
  */
 export async function POST(request: NextRequest) {
-  const __sb = requireSupabase({ requirePostgres: true }); if (__sb) return __sb;
+  // Sandbox path: if Supabase isn't configured, still proceed as long as the
+  // Postgres pool is reachable (lib/pg.ts throws clearly if SUPABASE_DB_POOLER_URL
+  // isn't set). The original guard short-circuited on missing Supabase env,
+  // which made signup impossible in the sandbox.
+  if (isSupabaseConfigured()) {
+    // Production path — verify Postgres is also configured before proceeding.
+    const dbUrl =
+      process.env.SUPABASE_DB_POOLER_URL || process.env.DATABASE_URL;
+    if (!dbUrl || !dbUrl.startsWith("postgres")) {
+      return NextResponse.json(
+        {
+          error:
+            "Postgres connection not configured. Set SUPABASE_DB_POOLER_URL in .env.local to a postgresql:// URL.",
+        },
+        { status: 503 },
+      );
+    }
+  }
   const body = await request.json().catch(() => ({}));
   const email = (body.email as string | undefined)?.trim().toLowerCase();
   const password = body.password as string | undefined;

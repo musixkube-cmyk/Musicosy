@@ -1,0 +1,10 @@
+import pg from 'pg';
+const c = new pg.Client({ host: '127.0.0.1', port: 5432, database: 'musicosy', user: 'postgres', password: 'postgres' });
+await c.connect();
+const r = await c.query("SELECT count(*) FROM information_schema.tables WHERE table_schema='public'");
+console.log('public tables:', r.rows[0].count);
+const r2 = await c.query("SELECT count(*) FROM information_schema.tables WHERE table_schema='auth'");
+console.log('auth tables:', r2.rows[0].count);
+const r3 = await c.query("SELECT proname FROM pg_proc WHERE proname='user_exists_by_email'");
+console.log('user_exists_by_email fn:', r3.rows);
+await c.end();

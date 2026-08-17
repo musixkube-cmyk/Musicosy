@@ -1,0 +1,17 @@
+{
+  "name": "musicosy-postgres",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot index.ts",
+    "start": "bun index.ts"
+  },
+  "dependencies": {
+    "embedded-postgres": "^18.4.0-beta.17",
+    "pg": "^8.23.0"
+  },
+  "trustedDependencies": [
+    "@embedded-postgres/linux-x64"
+  ]
+}

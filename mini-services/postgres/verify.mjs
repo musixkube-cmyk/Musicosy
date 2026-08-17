@@ -1,0 +1,16 @@
+import pg from 'pg';
+const c = new pg.Client({ host: '127.0.0.1', port: 5432, database: 'musicosy', user: 'postgres', password: 'postgres' });
+await c.connect();
+const t = await c.query("SELECT count(*) FROM information_schema.tables WHERE table_schema='public'");
+console.log('public tables:', t.rows[0].count);
+const a = await c.query("SELECT count(*) FROM information_schema.tables WHERE table_schema='auth'");
+console.log('auth tables:', a.rows[0].count);
+const f = await c.query("SELECT proname FROM pg_proc WHERE proname='user_exists_by_email'");
+console.log('user_exists_by_email fn:', f.rows[0]?.proname || 'NOT FOUND');
+const r = await c.query("SELECT rolname FROM pg_roles WHERE rolname IN ('anon','authenticated','service_role') ORDER BY rolname");
+console.log('roles:', r.rows.map(x=>x.rolname).join(', '));
+const cryptTest = await c.query("SELECT crypt('hello', gen_salt('bf')) AS hash");
+console.log('crypt works:', cryptTest.rows[0].hash.substring(0, 20) + '...');
+const verify = await c.query("SELECT crypt('hello', $1) = $1 AS match", [cryptTest.rows[0].hash]);
+console.log('crypt verify:', verify.rows[0].match);
+await c.end();

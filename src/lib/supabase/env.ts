@@ -25,6 +25,22 @@ export const AUTH_COOKIE_NAME = `sb-${
 }-auth-token`;
 
 /**
+ * Local session cookie name — used when Supabase isn't configured.
+ *
+ * In a real deployment, auth flows through GoTrue (Supabase Auth) which
+ * issues a JWT stored in the `sb-<ref>-auth-token` cookie. The middleware
+ * then calls `supabase.auth.getUser()` to verify it.
+ *
+ * In this sandbox (no GoTrue available), the `/api/auth/local-signin` route
+ * verifies the password directly against `auth.users.encrypted_password` via
+ * crypt() and issues a simple base64-encoded session token in this cookie.
+ * The middleware checks for it as a fallback when Supabase env vars are
+ * empty.
+ */
+export const LOCAL_AUTH_COOKIE_NAME =
+  process.env.LOCAL_AUTH_COOKIE_NAME ?? "musicosy_local_session";
+
+/**
  * Returns true iff the Supabase env vars needed to build a client are set.
  *
  * Used by the dev portal's layouts, pages, and API routes to short-circuit
