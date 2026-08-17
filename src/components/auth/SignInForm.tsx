@@ -1,11 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
-import { SupabaseNotConfigured } from "@/components/dashboard/SupabaseNotConfigured";
 
 /**
  * Shared Musicosy sign-in form — used by all three portals.
@@ -46,13 +44,11 @@ export default function SignInForm({
   // middleware sets ?next=<original-path> when bouncing an unauthed user
   const next = params.get("next") || redirectTo;
 
-  // Short-circuit when Supabase env vars aren't configured — show the
-  // "configure Supabase" placeholder instead of throwing on createBrowserClient().
-  if (!isSupabaseConfigured()) {
-    return <SupabaseNotConfigured redirectTo={next} />;
-  }
-
-  const supabase = createBrowserClient();
+  // Mock mode when Supabase env vars aren't configured — render the auth
+  // card anyway (its only job is auth) so the page is previewable. Every
+  // action falls through to `finish()` which redirects to the portal.
+  const configured = isSupabaseConfigured();
+  const supabase = configured ? createBrowserClient() : null;
   const [pending, startTransition] = useTransition();
 
   const [email, setEmail] = useState("");
@@ -81,6 +77,7 @@ export default function SignInForm({
   async function sendOtp() {
     setError(null);
     setInfo(null);
+    if (!supabase) { setOtpSent(true); setInfo("Code sent — check your phone."); return; }
     const { error } = await supabase.auth.signInWithOtp({
       phone: phone.trim(),
       options: { shouldCreateUser: true },
@@ -96,6 +93,7 @@ export default function SignInForm({
   async function verifyOtp() {
     setError(null);
     setInfo(null);
+    if (!supabase) { finish(); return; }
     const { error } = await supabase.auth.verifyOtp({
       phone: phone.trim(),
       token: otpCode.trim(),
@@ -112,6 +110,8 @@ export default function SignInForm({
   async function oauth(provider: "google" | "apple") {
     setError(null);
     setInfo(null);
+    void provider;
+    if (!supabase) { finish(); return; }
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
@@ -125,6 +125,11 @@ export default function SignInForm({
   async function checkEmailAndContinue() {
     setError(null);
     setInfo(null);
+    if (!configured) {
+      setFlow("signin");
+      setShowPassword(true);
+      return;
+    }
     setCheckingEmail(true);
     try {
       const res = await fetch("/api/auth/check-email", {
@@ -150,6 +155,7 @@ export default function SignInForm({
   // 4 attempts w/ 600ms gap — covers GoTrue eventual consistency between an
   // auth.users INSERT (via direct pg) and GoTrue's read path.
   async function signInWithRetry(emailVal: string, passwordVal: string, attempts = 4) {
+    if (!supabase) return null;
     for (let i = 0; i < attempts; i++) {
       const { error } = await supabase.auth.signInWithPassword({
         email: emailVal,
@@ -159,12 +165,14 @@ export default function SignInForm({
       if (error.message.toLowerCase().includes("invalid login")) return error;
       await new Promise((r) => setTimeout(r, 600));
     }
-    return (await supabase.auth.signInWithPassword({ email: emailVal, password: passwordVal })).error;
+    return (await supabase!.auth.signInWithPassword({ email: emailVal, password: passwordVal })).error;
   }
 
   async function submitPassword() {
     setError(null);
     setInfo(null);
+
+    if (!supabase) { finish(); return; }
 
     if (flow === "signin") {
       const err = await signInWithRetry(email.trim(), password);
@@ -211,15 +219,6 @@ export default function SignInForm({
 
   return (
     <main className="min-h-screen bg-white text-neutral-900">
-      <div className="px-6 pt-8 md:px-12">
-        <Link
-          href="/"
-          className="font-mono text-xs uppercase tracking-[0.3em] text-neutral-500 transition-colors hover:text-neutral-900"
-        >
-          ← Back
-        </Link>
-      </div>
-
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-16 px-6 py-14 md:px-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-24 lg:py-24">
         {/* Left: oversized transparent Musicosy logo */}
         <div className="flex items-center justify-start">

@@ -43,3 +43,28 @@ Stage Summary:
 - The auth page is now wired up: `src/components/auth/SignInForm.tsx` (NEW), `src/app/(ads)/ads/signin/page.tsx` (existing, now resolves its import), `src/app/(ads)/ads/layout.tsx` (modified to skip dashboard chrome for auth routes), `public/logo-on-dark.png` (NEW transparent-background logo variant for dark surfaces).
 - Supabase scaffolding was already in place from earlier work — `supabase/config.toml` + `supabase/migrations/*.sql` cover the schema, RLS policies, and the `user_exists_by_email` RPC used by /api/auth/check-email.
 - Auth flow is fully wired for when Supabase env vars are configured: email check → password reveal → sign-in or sign-up → redirect to portal dashboard. OAuth (Google/Apple) wires to the existing `/ads/auth/callback` route which calls `exchangeCodeForSession`. Demo mode keeps the page usable/previewable without credentials.
+
+---
+Task ID: 3
+Agent: main (Z.ai Code orchestrator)
+Task: User rejected previous layout. User said: "Don't touch the logo. Only component that you need to get is the auth card — that's only job that component. There is no back button." Pointed to https://github.com/musixkube-cmyk/landing-ads.git for reference.
+
+Work Log:
+- Cloned reference repo to /tmp/landing-ads-ref. Found the auth card pattern at src/app/signin/page.tsx — 2-column grid (logo LEFT, auth panel RIGHT) with phone/google/apple/email + Continue buttons, password reveal on Continue.
+- The auth card was ALREADY inlined correctly in src/components/auth/SignInForm.tsx (left logo + right auth panel matching the reference repo exactly). The logo image /musicosy-logo.png exists (357KB) and was NOT touched.
+- Root cause of "you didn't get the auth page": the component had an early-return `if (!isSupabaseConfigured()) return <SupabaseNotConfigured />` — since Supabase env vars are not set in this sandbox, users saw the placeholder INSTEAD of the auth card.
+- Surgical edits to SignInForm.tsx ONLY (no rewrite, no logo touch):
+  1. Removed the `if (!isSupabaseConfigured()) return <SupabaseNotConfigured />` early-return — auth card now ALWAYS renders.
+  2. Made `supabase` client nullable: `const supabase = configured ? createBrowserClient() : null`.
+  3. Added mock-mode guards in every auth handler: sendOtp / verifyOtp / oauth / checkEmailAndContinue / submitPassword / signInWithRetry. When `!supabase`, mock mode either reveals the next step (password field) or calls `finish()` to redirect to the portal — matching the reference repo's mock behaviour.
+  4. Removed the `← Back` link (user said "There is no back button") and the unused `Link` + `SupabaseNotConfigured` imports.
+- Verified with Agent Browser + VLM (glm-5v-turbo):
+  - Logo on LEFT, fully visible (M icon + "Musicosy" wordmark with orange accent dot).
+  - RIGHT panel in exact order: "Continue with phone" (black pill) → "Continue with Google" → "Continue with Apple" → "or" divider → email input → "Continue" button → Terms footer.
+  - NO Back button anywhere. White background. Auth card IS showing (no placeholder).
+  - Interaction test: filled email "test@musicosy.com" → clicked Continue (ref e8) → password field + "Sign in" button revealed via the 500ms grid transition. Mock-mode guard (`setFlow("signin"); setShowPassword(true); return;`) confirmed working.
+- Lint: 0 errors, 139 warnings (all pre-existing in other generated pages). Zero issues in SignInForm.tsx.
+
+Stage Summary:
+- The auth card component is now visible and interactive. Logo untouched on the left. No back button. The auth card's only job is auth (phone OTP / Google / Apple / email+password), and it renders + works in mock mode without Supabase env vars.
+- Files touched: src/components/auth/SignInForm.tsx (10 surgical edits, ~20 lines changed). No other files modified. Logo file /musicosy-logo.png NOT touched.
