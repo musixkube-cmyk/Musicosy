@@ -218,8 +218,8 @@ export default function SignInForm({
   }
 
   return (
-    <main className="min-h-screen bg-white text-neutral-900">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-16 px-6 py-14 md:px-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-24 lg:py-24">
+    <main className="flex min-h-screen items-center justify-center bg-white text-neutral-900">
+      <div className="mx-auto grid w-full max-w-5xl grid-cols-1 items-center gap-12 px-6 py-12 md:px-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:px-16">
         {/* Left: oversized transparent Musicosy logo */}
         <div className="flex items-center justify-start">
           <img

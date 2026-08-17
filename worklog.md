@@ -68,3 +68,21 @@ Work Log:
 Stage Summary:
 - The auth card component is now visible and interactive. Logo untouched on the left. No back button. The auth card's only job is auth (phone OTP / Google / Apple / email+password), and it renders + works in mock mode without Supabase env vars.
 - Files touched: src/components/auth/SignInForm.tsx (10 surgical edits, ~20 lines changed). No other files modified. Logo file /musicosy-logo.png NOT touched.
+
+---
+Task ID: 4
+Agent: main (Z.ai Code orchestrator)
+Task: User said "you have the logo and auth box too high it need to have the same amount of whitespace on all sides". Fix the vertical/horizontal balance so all four sides have equal whitespace.
+
+Work Log:
+- Root cause: the grid container used `items-start` + `py-14`/`py:py-24`, pinning content to the top of `min-h-screen` with all leftover viewport space below — so top whitespace was tiny and bottom was huge.
+- Edit 1 (vertical centering): changed `<main className="min-h-screen ...">` to `<main className="flex min-h-screen items-center justify-center ...">` and grid `items-start` → `items-center`. This vertically centers the content block, making top ≈ bottom whitespace.
+- VLM check after Edit 1: top ~180px / bottom ~160px (balanced vertically), but left ~60-80px / right ~40-50px (too small AND unequal to top/bottom). The `max-w-7xl` (1280px) filled the viewport width, leaving almost no horizontal whitespace.
+- Edit 2 (horizontal balance): shrank container `max-w-7xl` → `max-w-5xl` (1024px) so the centered container leaves ~128px on each side, and added `lg:px-16` (64px) internal padding so logo left edge and auth panel right edge sit at ~192px from viewport edge. Also tightened `lg:gap-24` → `lg:gap-12` so the narrower content still fits without overflow.
+- VLM check after Edit 2: TOP ~180px, BOTTOM ~140px, LEFT ~150px, RIGHT ~150px — all four sides within ~40px of each other. VLM confirmed "roughly equal: Yes".
+- Logo file NOT touched. Auth card structure NOT touched. Only the outer grid container classes changed (3 Tailwind class tweaks).
+- Lint: 0 errors, zero issues in SignInForm.tsx. Dev server: /ads/signin returns 200.
+
+Stage Summary:
+- The signin page content (logo left + auth panel right) is now centered both vertically and horizontally with balanced whitespace on all four sides (~140-180px each).
+- Files touched: src/components/auth/SignInForm.tsx (2 edits to the grid wrapper className — vertical centering via flex on main, horizontal balance via max-w-5xl + lg:px-16).
