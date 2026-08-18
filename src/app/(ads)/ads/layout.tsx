@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { TopBar } from "@/components/ads/top-bar";
 import { ContextualRightRail } from "@/components/ads/right-rail";
 import { SidebarProfile } from "@/components/ads/profile-dropdown";
@@ -152,6 +152,18 @@ export default function AdsLayout({ children }: { children: React.ReactNode }) {
     () => new Set<number>([expandedByDefault])
   );
 
+  /* Mobile sidebar drawer state — sidebar is hidden on screens < lg,
+     and slides in as an overlay when toggled open. */
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  /* Close mobile sidebar on route change */
+  useEffect(() => {
+    if (mobileSidebarOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMobileSidebarOpen(false);
+    }
+  }, [pathname]);
+
   function toggleSection(idx: number) {
     setExpanded((prev) => {
       const next = new Set(prev);
@@ -181,16 +193,65 @@ export default function AdsLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex h-screen bg-white text-neutral-900">
-      {/* ─── Left Sidebar ─── */}
-      <aside className="flex w-60 shrink-0 flex-col border-r border-neutral-200 bg-white">
-        {/* Logo */}
-        <div className="flex h-14 items-center border-b border-neutral-200 px-5">
+    <div className="flex h-screen flex-col bg-white text-neutral-900 lg:flex-row">
+      {/* ─── Mobile top bar (lg:hidden) — hamburger + logo ─── */}
+      <div className="flex h-14 items-center gap-3 border-b border-neutral-200 bg-white px-4 lg:hidden">
+        <button
+          type="button"
+          aria-label="Open navigation menu"
+          onClick={() => setMobileSidebarOpen(true)}
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-neutral-200 text-neutral-700 hover:bg-neutral-50"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <img
+          src="/logo-full-same-row.png"
+          alt="Musicosy"
+          className="h-8 w-auto object-contain"
+        />
+      </div>
+
+      {/* ─── Mobile sidebar overlay backdrop ─── */}
+      {mobileSidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          onClick={() => setMobileSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* ─── Left Sidebar ───
+          Desktop: static w-60 column.
+          Mobile: fixed drawer that slides in when mobileSidebarOpen. */}
+      <aside
+        className={`
+          fixed inset-y-0 left-0 z-50 flex w-72 shrink-0 flex-col border-r border-neutral-200 bg-white transition-transform duration-200 ease-out
+          lg:static lg:z-auto lg:w-60 lg:translate-x-0 lg:transition-none
+          ${mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
+        {/* Sidebar header (mobile-only close button + logo) */}
+        <div className="flex h-14 items-center justify-between border-b border-neutral-200 px-5">
           <img
             src="/logo-full-same-row.png"
             alt="Musicosy"
             className="h-9 w-auto object-contain"
           />
+          <button
+            type="button"
+            aria-label="Close navigation menu"
+            onClick={() => setMobileSidebarOpen(false)}
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 lg:hidden"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
         </div>
 
         {/* Global Create Campaign button */}
@@ -268,12 +329,14 @@ export default function AdsLayout({ children }: { children: React.ReactNode }) {
 
       {/* ─── Right area: Top Bar + Main + Right Rail ─── */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        {/* ─── Top Bar — all 8 sub-components ─── */}
-        <TopBar />
+        {/* ─── Top Bar — all 8 sub-components (desktop only) ─── */}
+        <div className="hidden lg:block">
+          <TopBar />
+        </div>
 
         {/* ─── Main Content Area + Contextual Right Rail ─── */}
         <div className="flex flex-1 overflow-hidden">
-          <main className="flex-1 overflow-y-auto bg-neutral-50/50 p-6">{children}</main>
+          <main className="flex-1 overflow-y-auto bg-neutral-50/50 p-4 lg:p-6">{children}</main>
 
           {/* ─── Contextual Right Rail — visible on campaign creation/editing pages ─── */}
           <ContextualRightRail visible={showRightRail} />
