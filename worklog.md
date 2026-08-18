@@ -110,3 +110,33 @@ Work Log:
 
 Stage Summary:
 - Repo pushed to https://github.com/musixkube-cmyk/adportal.git on `main` branch (commit fde5147, 631 files). `.env` untracked and excluded from the push. PAT used once in-process, never persisted to disk/config/history. User should revoke the PAT on GitHub because it was shared in plaintext chat.
+
+---
+Task ID: 6
+Agent: main (Z.ai Code orchestrator)
+Task: User clarified the tree they pasted is NOT a help center — it's the "Getting Started" onboarding feature. Build this first, then loop back to the help center later. Tree: 6 steps (Intent → Advertiser/Agency → Business Info → Account Info → Business Verification → Invite Members) with sub-items under each.
+
+Work Log:
+- Cloned reference repo musixkube-cmyk/landing-ads.git to /tmp/landing-ads-ref. Found /ads/setup/page.tsx (full wizard with top progress bar) and /ads/onboarding/page.tsx (simpler variant). The user's tree matches /ads/setup's spec exactly (verified via the spec comment in that file).
+- Checked current project: both /ads/setup and /ads/onboarding already exist (with top progress bars). To avoid clobbering them and to honour the user's "should be a feature in the platform" + the sidebar-tree layout they pasted, built a NEW route /ads/getting-started with a 3-column layout: [existing dashboard sidebar] | [step tree navigator] | [step content].
+- Created src/app/(ads)/ads/getting-started/page.tsx (~560 lines):
+  • Step tree navigator (left, w-72): mirrors the EXACT tree the user pasted. Each of the 6 steps renders as a row with a numbered circle (1-6) or a green checkmark (if done). Active step = black bg + white text. Sub-items render under the active/done steps in a left-bordered indent (e.g. under "Business Information": Business name / Industry / Country / Region / Website; under "Invite Members": Active / Pending / Removed / Search members).
+  • Step content panel (right): shows the current step's form. Reused the form logic from /ads/setup:
+    - Step 1 Intent: 2 large option cards ("I want to work with artists" / "I want to grow my business") with icons + descriptions.
+    - Step 2 Advertiser/Agency: 2 cards (Advertiser / Agency) with descriptions.
+    - Step 3 Business Information: form (Business name input, Industry select, Country/Region select, Website input).
+    - Step 4 Account Information: form (Account name input, Time zone select, Currency select).
+    - Step 5 Business Verification: "Start verification" CTA (toggles to "Submitted" badge) + 3 capability checkboxes (Engage creators / Review analytics / Make payments to creators) matching the tree's sub-items.
+    - Step 6 Invite Members: email+role+invite row, filter tabs (All/Active/Pending/Removed with counts), search box, member list with avatar+status+role+remove action. Pre-seeded with 3 sample members.
+  • Validation: Continue button disabled until step's required field is filled (step 1 needs intent, step 2 needs accountType, step 3 needs businessName+industry+country, step 4 needs accountName; steps 5-6 always allow Continue).
+  • Footer: Back (disabled on step 1) + "Skip for now" link + Continue / "Complete setup" (final step redirects to /ads/dashboard).
+- Added "Getting Started" section to the top of the dashboard sidebar nav in src/app/(ads)/ads/layout.tsx (icon: sparkles, child: "Overview" → /ads/getting-started, primary: true). Existing 9 nav sections pushed down unchanged.
+- Verified with Agent Browser + VLM:
+  - Layout: dashboard sidebar with Getting Started nav item (yes), step tree with all 6 steps + sub-items (yes), step 1 showing two intent cards (yes), Back+Continue buttons (yes). VLM confirmed all 4 checks.
+  - Interaction: clicked "I want to grow my business" → Continue enabled → clicked Continue → advanced to step 2. VLM confirmed step 1 now shows green checkmark (done), step 2 highlighted as active, and step 2 content shows Advertiser/Agency cards.
+- Lint: 0 errors, 139 warnings (all pre-existing). Zero issues in the new getting-started page. Dev server: /ads/getting-started returns 200.
+
+Stage Summary:
+- New feature /ads/getting-started is live and reachable from the dashboard sidebar. It implements the exact step tree the user pasted (6 steps with sub-items) as a sidebar navigator + step-content panel. Reusable form logic sourced from the reference repo's /ads/setup. Existing /ads/setup and /ads/onboarding routes left untouched.
+- Files: NEW src/app/(ads)/ads/getting-started/page.tsx (~560 lines). MODIFIED src/app/(ads)/ads/layout.tsx (added Getting Started nav section at top of navTree).
+- Next: loop back to the help center build (the larger tree with 16 sections) per the user's earlier message.

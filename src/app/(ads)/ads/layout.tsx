@@ -10,6 +10,13 @@ import { SidebarProfile } from "@/components/ads/profile-dropdown";
 /* ─── Collapsible sidebar navigation tree — matches spec exactly ─── */
 const navTree = [
   {
+    label: "Getting Started",
+    icon: "sparkles",
+    children: [
+      { label: "Overview", href: "/ads/getting-started", icon: "sparkles", primary: true },
+    ],
+  },
+  {
     label: "Dashboard",
     icon: "home",
     children: [
