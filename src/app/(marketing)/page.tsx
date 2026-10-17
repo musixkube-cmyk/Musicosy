@@ -49,10 +49,26 @@ const sections = [
 
 export default function Home() {
   const [active, setActive] = useState(0);
+  const [railHidden, setRailHidden] = useState(false);
   const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const footerRef = useRef<HTMLDivElement>(null);
   const vidA = useRef<HTMLVideoElement>(null);
   const vidB = useRef<HTMLVideoElement>(null);
   const [showA, setShowA] = useState(true);
+
+  // Hide the left rail nav when the footer enters the viewport so the
+  // 8 section words stop at the black canvas and don't bleed into the
+  // white footer area.
+  useEffect(() => {
+    const footer = footerRef.current;
+    if (!footer) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setRailHidden(entry.isIntersecting),
+      { rootMargin: "0px 0px -50% 0px" },
+    );
+    io.observe(footer);
+    return () => io.disconnect();
+  }, []);
 
   // Crossfade loop: two videos alternate so the loop seam is a smooth dissolve
   useEffect(() => {
@@ -164,10 +180,14 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Far-left rail */}
+      {/* Far-left rail — hides when the footer is in view so the
+          8 section words stop at the black canvas instead of bleeding
+          into the white footer. */}
       <nav
         aria-label="Sections"
-        className="fixed left-4 top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-3 sm:flex"
+        className={`fixed left-4 top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-3 transition-opacity duration-300 sm:flex ${
+          railHidden ? "pointer-events-none opacity-0" : "opacity-100"
+        }`}
       >
         {sections.map((s, i) => (
           <a
@@ -226,8 +246,11 @@ export default function Home() {
       {/* Footer — shared SiteFooter component, same as the Help Center
           pages. White background, dark text, Musicosy orange logo +
           link hovers. Stops the full-bleed background video where the
-          footer starts. */}
-      <SiteFooter />
+          footer starts. The wrapper div lets us observe when the
+          footer enters the viewport so we can hide the left rail nav. */}
+      <div ref={footerRef} className="relative z-20">
+        <SiteFooter />
+      </div>
     </div>
   );
 }
