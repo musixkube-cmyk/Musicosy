@@ -123,25 +123,35 @@ export default function Home() {
 
   return (
     <div className="relative flex min-h-screen flex-col text-ink-foreground">
-      {/* Full-bleed background video — crossfade loop */}
+      {/* Full-bleed background video — crossfade loop.
+          If the video can't load (unsupported codec, network, etc.),
+          the poster image shows instead and no error is thrown. */}
       <div className="fixed inset-0 -z-10">
         <video
           ref={vidA}
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ${showA ? "opacity-100" : "opacity-0"}`}
-          src="/astronaut.mp4"
           autoPlay
           muted
+          loop
           playsInline
+          preload="auto"
+          poster="/sample-design.png"
           aria-hidden="true"
-        />
+        >
+          <source src="/astronaut.mp4" type="video/mp4" />
+        </video>
         <video
           ref={vidB}
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ${showA ? "opacity-0" : "opacity-100"}`}
-          src="/astronaut.mp4"
           muted
+          loop
           playsInline
+          preload="auto"
+          poster="/sample-design2.png"
           aria-hidden="true"
-        />
+        >
+          <source src="/astronaut.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-ink/60" />
         <div className="absolute inset-0 bg-gradient-to-r from-ink/70 via-ink/40 to-ink/15" />
       </div>
