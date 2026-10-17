@@ -21,43 +21,39 @@ export function SiteFooter() {
       className="relative z-10 mt-auto border-t border-neutral-200 bg-white text-neutral-900"
       style={{ "--accent": "oklch(0.16 0.008 60)" } as React.CSSProperties}
     >
-      {/* Product image + six-column nav grid */}
-      <div className="w-full px-6 py-12 lg:px-10">
-        <div className="flex gap-10">
-          {/* Product image — hangs left */}
-          <div className="hidden shrink-0 lg:block">
-            <img
-              src="/footer-bg.png"
-              alt="Musicosy headphones"
-              className="h-48 w-auto object-contain"
-            />
-          </div>
+      {/* Product image — absolutely positioned so it doesn't affect the grid */}
+      <img
+        src="/footer-bg.png"
+        alt="Musicosy headphones"
+        className="pointer-events-none absolute bottom-32 left-6 hidden h-40 w-auto object-contain lg:block"
+        aria-hidden="true"
+      />
 
-          {/* Six-column nav grid */}
-          <div className="grid flex-1 grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
-            {footerNav.map((group) => (
-              <div key={group.label + group.path}>
-                <NavLink
-                  href={group.path}
-                  className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-neutral-500 transition-colors hover:text-accent"
-                >
-                  {group.label}
-                </NavLink>
-                <ul className="mt-4 space-y-2.5">
-                  {(group.children ?? []).map((child) => (
-                    <li key={child.label + child.path}>
-                      <NavLink
-                        href={child.path}
-                        className="text-sm text-neutral-700 transition-colors hover:text-accent"
-                      >
-                        {child.label}
-                      </NavLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+      {/* Six-column nav grid — full width, evenly spaced */}
+      <div className="relative w-full px-6 py-12 lg:px-10">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
+          {footerNav.map((group) => (
+            <div key={group.label + group.path}>
+              <NavLink
+                href={group.path}
+                className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-neutral-500 transition-colors hover:text-accent"
+              >
+                {group.label}
+              </NavLink>
+              <ul className="mt-4 space-y-2.5">
+                {(group.children ?? []).map((child) => (
+                  <li key={child.label + child.path}>
+                    <NavLink
+                      href={child.path}
+                      className="text-sm text-neutral-700 transition-colors hover:text-accent"
+                    >
+                      {child.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
 
