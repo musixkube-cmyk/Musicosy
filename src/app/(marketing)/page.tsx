@@ -50,6 +50,47 @@ const sections = [
 export default function Home() {
   const [active, setActive] = useState(0);
   const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const vidA = useRef<HTMLVideoElement>(null);
+  const vidB = useRef<HTMLVideoElement>(null);
+  const [showA, setShowA] = useState(true);
+
+  // Crossfade loop: two copies of the same video alternate so the loop
+  // seam is a smooth dissolve instead of a visible glitch. The video is
+  // 6 seconds; we start the lag video at 4.5s and crossfade over 1.5s
+  // so the transition hides the loop point entirely.
+  useEffect(() => {
+    const DURATION = 6;
+    const FADE_START = 4.5;
+    const FADE_MS = (DURATION - FADE_START) * 1000;
+
+    const lead = showA ? vidA : vidB;
+    const lag = showA ? vidB : vidA;
+
+    function onTimeUpdate() {
+      if (!lead.current || lead.current.currentTime < FADE_START) return;
+      lead.current.removeEventListener("timeupdate", onTimeUpdate);
+
+      if (lag.current) {
+        lag.current.currentTime = 0;
+        lag.current.play();
+      }
+      setShowA(!showA);
+
+      setTimeout(() => {
+        if (lead.current) {
+          lead.current.pause();
+          lead.current.currentTime = 0;
+        }
+      }, FADE_MS + 200);
+    }
+
+    if (lead.current) {
+      lead.current.addEventListener("timeupdate", onTimeUpdate);
+    }
+    return () => {
+      if (lead.current) lead.current.removeEventListener("timeupdate", onTimeUpdate);
+    };
+  }, [showA]);
 
   useEffect(() => {
     let frame = 0;
@@ -82,14 +123,25 @@ export default function Home() {
 
   return (
     <div className="relative flex min-h-screen flex-col text-ink-foreground">
-      {/* Full-bleed background video — single looping video that rotates
-          at all times and never times out. */}
+      {/* Full-bleed background video — dual-video crossfade loop.
+          Two copies alternate so the loop seam is a smooth dissolve.
+          Never times out — rotates at all times. */}
       <div className="fixed inset-0 z-0">
         <video
-          className="absolute inset-0 h-full w-full object-cover"
+          ref={vidA}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ${showA ? "opacity-100" : "opacity-0"}`}
           autoPlay
           muted
-          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        >
+          <source src="/video-canvas.mp4" type="video/mp4" />
+        </video>
+        <video
+          ref={vidB}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ${showA ? "opacity-0" : "opacity-100"}`}
+          muted
           playsInline
           preload="auto"
           aria-hidden="true"
