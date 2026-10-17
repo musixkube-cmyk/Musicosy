@@ -135,7 +135,6 @@ export default function Home() {
           loop
           playsInline
           preload="auto"
-          poster="/sample-design.png"
           aria-hidden="true"
           onError={() => { if (vidA.current) vidA.current.style.display = "none"; }}
         >
@@ -148,7 +147,6 @@ export default function Home() {
           loop
           playsInline
           preload="auto"
-          poster="/sample-design2.png"
           aria-hidden="true"
           onError={() => { if (vidB.current) vidB.current.style.display = "none"; }}
         >
