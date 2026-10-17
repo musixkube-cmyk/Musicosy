@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Questrial, DM_Sans } from "next/font/google";
-import "./globals.css";
 
 const questrial = Questrial({
   variable: "--font-display",

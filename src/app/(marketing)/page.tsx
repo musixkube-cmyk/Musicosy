@@ -126,7 +126,7 @@ export default function Home() {
       {/* Full-bleed background video — crossfade loop.
           If the video can't load (unsupported codec, network, etc.),
           the poster image shows instead and no error is thrown. */}
-      <div className="fixed inset-0 -z-10">
+      <div className="fixed inset-0 z-0">
         <video
           ref={vidA}
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ${showA ? "opacity-100" : "opacity-0"}`}
