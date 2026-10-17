@@ -3,21 +3,6 @@ import { Inter, JetBrains_Mono, Questrial, DM_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
-/**
- * ROOT LAYOUT — applies the Musicosy design system to every surface.
- *
- * Four fonts loaded at root so every route group can use what it needs:
- *   - Questrial   → marketing landing display
- *   - DM Sans     → marketing landing body
- *   - Inter       → consumer social app (MD3 surface)
- *   - JetBrains Mono → social app data + label-caps
- *
- * Material Symbols (the icon set used by the social app) is loaded via
- * a CDN <link> in <head> because next/font doesn't support icon fonts.
- *
- * Per-route-group layouts may still layer their own globals.css on top,
- * but the base token set + fonts live here so every surface has access.
- */
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -51,6 +36,31 @@ export const metadata: Metadata = {
   },
   description:
     "Musicosy is the social platform for music: stream what you love, earn from every play, and publish straight to labels, sync agents and distributors.",
+  keywords: [
+    "Musicosy",
+    "music platform",
+    "stream music",
+    "earn from music",
+    "publish music",
+    "indie artists",
+    "labels",
+    "sync agents",
+  ],
+  authors: [{ name: "Musicosy" }],
+  openGraph: {
+    title: "Musicosy — Stream. Earn. Publish.",
+    description:
+      "Stream, earn and publish on the social platform built for creators, indie artists, labels and advertisers.",
+    url: "https://musicosy.com",
+    siteName: "Musicosy",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Musicosy — Stream. Earn. Publish.",
+    description:
+      "Stream, earn and publish on the social platform built for creators, indie artists, labels and advertisers.",
+  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -64,17 +74,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${inter.variable} ${jetbrains.variable} ${questrial.variable} ${dmSans.variable}`}
-    >
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrains.variable} ${questrial.variable} ${dmSans.variable}`}>
       <head>
-        {/* Material Symbols — icon set used by the consumer social app */}
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         />
+        <style>{`
+          :root {
+            --font-display: "Questrial", sans-serif;
+            --font-sans: "DM Sans", sans-serif;
+            --font-headline-sm: "Inter", sans-serif;
+            --font-headline-md: "Inter", sans-serif;
+            --font-body-sm: "Inter", sans-serif;
+            --font-body-lg: "Inter", sans-serif;
+            --font-mono-data: "JetBrains Mono", monospace;
+            --font-label-caps: "JetBrains Mono", monospace;
+          }
+        `}</style>
       </head>
       <body className="antialiased bg-background text-foreground">
         {children}

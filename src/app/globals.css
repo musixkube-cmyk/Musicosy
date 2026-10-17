@@ -1,216 +1,17 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-
 /*
- * Musicosy design system (ported from the TanStack Start source's styles.css).
- *
- * Brand: stonish-gray light background, orange accent, near-black "ink".
- * Fonts: Bebas Neue (display) + Barlow (body), wired via next/font in layout.tsx
- *        as --font-display and --font-sans respectively.
- *
- * All colors use oklch.
+ * MusicOSY — merged design system
+ * - Landing page: ink/background/primary tokens, Questrial + DM Sans
+ * - Social app: MD3 surface-container tokens, Inter + JetBrains Mono + Material Symbols
+ * - Shared: kinetic orange #ff5722 primary
  */
 
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
-  --font-display: var(--font-display), "Bebas Neue", system-ui, sans-serif;
-  --font-sans: var(--font-sans), "Barlow", system-ui, sans-serif;
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-ink: var(--ink);
-  --color-ink-foreground: var(--ink-foreground);
-  --color-stone-deep: var(--stone-deep);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
-
-:root {
-  --radius: 0.25rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.18 0.006 60);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.006 60);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.006 60);
-  --primary: oklch(0.16 0.004 60);
-  --primary-foreground: oklch(0.98 0.004 92);
-  --secondary: oklch(0.885 0.005 92);
-  --secondary-foreground: oklch(0.2 0.006 60);
-  --muted: oklch(0.895 0.004 92);
-  --muted-foreground: oklch(0.46 0.008 70);
-  --accent: oklch(0.67 0.185 44);
-  --accent-foreground: oklch(0.99 0.01 90);
-  --ink: oklch(0.13 0.004 60);
-  --ink-foreground: oklch(0.98 0.004 92);
-  --stone-deep: oklch(0.82 0.006 92);
-  --destructive: oklch(0.55 0.21 27);
-  --destructive-foreground: oklch(0.98 0.003 92);
-  --border: oklch(0.845 0.005 92);
-  --input: oklch(0.845 0.005 92);
-  --ring: oklch(0.67 0.185 44);
-  --chart-1: oklch(0.67 0.185 44);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.95 0.003 92);
-  --sidebar-foreground: oklch(0.18 0.006 60);
-  --sidebar-primary: oklch(0.16 0.004 60);
-  --sidebar-primary-foreground: oklch(0.98 0.004 92);
-  --sidebar-accent: oklch(0.895 0.004 92);
-  --sidebar-accent-foreground: oklch(0.2 0.006 60);
-  --sidebar-border: oklch(0.845 0.005 92);
-  --sidebar-ring: oklch(0.67 0.185 44);
-}
-
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
-}
-
-@layer base {
-  html,
-  body {
-    /* Use `clip` instead of `hidden`: `hidden` would compute overflow-y to
-       `auto`, turning body/html into a scroll container and breaking
-       `position: sticky` on descendants (e.g. the help-center sidebar).
-       `clip` prevents horizontal scroll without creating a scroll container. */
-    overflow-x: clip;
-  }
-
-  * {
-    border-color: var(--color-border);
-  }
-
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-  }
-}
-
-@layer base {
-  body {
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-  }
-
-  h1,
-  h2,
-  h3 {
-    font-family: var(--font-display);
-    letter-spacing: 0.01em;
-  }
-}
-
-@utility marquee-track {
-  animation: marquee 30s linear infinite;
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@utility disco-sheen {
-  background-image: linear-gradient(
-    100deg,
-    transparent 20%,
-    color-mix(in oklab, var(--accent) 35%, transparent) 45%,
-    transparent 70%
-  );
-  background-size: 220% 100%;
-  animation: sheen 7s ease-in-out infinite;
-}
-
-@keyframes sheen {
-  0%,
-  100% {
-    background-position: 120% 0;
-  }
-  50% {
-    background-position: -20% 0;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   CONSUMER SOCIAL APP TOKENS (from musicosy-social repo)
-   Loaded at root so /app/* routes have their MD3 surface-container
-   design system available.
-   ═══════════════════════════════════════════════════════════════ */
+@custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* MD3 surface-container tokens */
+  /* ── MD3 social app tokens (existing) ── */
   --color-primary-fixed-dim: #ffb5a0;
   --color-on-surface: #e5e2e1;
   --color-on-secondary-fixed-variant: #454747;
@@ -258,6 +59,27 @@
   --color-error: #ffb4ab;
   --color-outline-variant: #5b4039;
 
+  --radius: 0.75rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --radius-full: 9999px;
+
+  --spacing-rail-top-height: 56px;
+  --spacing-stack-gap: 8px;
+  --spacing-rail-bottom-height: 72px;
+  --spacing-rail-right-width: 300px;
+  --spacing-gutter: 16px;
+  --spacing-margin-page: 24px;
+
+  /* ── Landing page tokens (merged) ── */
+  --font-display: "Questrial", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
   /* Social app fonts */
   --font-headline-sm: "Inter", sans-serif;
   --font-headline-md: "Inter", sans-serif;
@@ -295,9 +117,120 @@
   --height-rail-top-height: 56px;
   --height-rail-bottom-height: 72px;
   --width-rail-right-width: 300px;
+
+  /* Landing page color mappings */
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-ink-muted: var(--ink-muted);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --shadow-lift: 0 18px 40px -24px oklch(0 0 0 / 0.45);
+  --shadow-glow: 0 14px 40px -12px oklch(0.68 0.2 43 / 0.45);
 }
 
-/* Material Symbols icon font (consumer app) */
+/* ── Landing page :root variables ── */
+:root {
+  /* Dark social app surface */
+  --background: oklch(0.16 0.008 60);
+  --foreground: oklch(0.97 0.004 90);
+
+  --card: oklch(0.21 0.009 60);
+  --card-foreground: oklch(0.97 0.004 90);
+  --popover: oklch(0.21 0.009 60);
+  --popover-foreground: oklch(0.97 0.004 90);
+
+  /* Musicosy orange */
+  --primary: oklch(0.72 0.19 45);
+  --primary-foreground: oklch(0.16 0.01 60);
+
+  /* Inverse block */
+  --ink: oklch(0.12 0.006 60);
+  --ink-foreground: oklch(0.98 0.004 90);
+  --ink-muted: oklch(0.7 0.01 80);
+
+  --secondary: oklch(0.26 0.009 60);
+  --secondary-foreground: oklch(0.97 0.004 90);
+  --muted: oklch(0.24 0.008 60);
+  --muted-foreground: oklch(0.72 0.012 80);
+  --accent: oklch(0.3 0.04 45);
+  --accent-foreground: oklch(0.97 0.01 80);
+
+  --destructive: oklch(0.6 0.22 27);
+  --destructive-foreground: oklch(0.98 0.003 248);
+
+  --border: oklch(0.29 0.008 60);
+  --input: oklch(0.33 0.008 60);
+  --ring: oklch(0.72 0.19 45);
+
+  --chart-1: oklch(0.72 0.19 45);
+  --chart-2: oklch(0.9 0.01 80);
+  --chart-3: oklch(0.75 0.13 60);
+  --chart-4: oklch(0.55 0.09 40);
+  --chart-5: oklch(0.85 0.05 70);
+
+  --sidebar: oklch(0.12 0.006 60);
+  --sidebar-foreground: oklch(0.98 0.004 90);
+  --sidebar-primary: oklch(0.72 0.19 45);
+  --sidebar-primary-foreground: oklch(0.16 0.01 60);
+  --sidebar-accent: oklch(0.26 0.01 60);
+  --sidebar-accent-foreground: oklch(0.98 0.004 90);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.72 0.19 45);
+}
+
+/* ── Base layer ── */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html,
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+/* ── Landing page utilities ── */
+@utility text-balance-tight {
+  text-wrap: balance;
+}
+
+@utility surface-grid {
+  background-image:
+    linear-gradient(to right, oklch(0 0 0 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0 0 0 / 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ── Material Symbols (social app) ── */
 .material-symbols-outlined {
   font-family: "Material Symbols Outlined";
   font-weight: normal;
@@ -319,7 +252,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar styling (consumer app) */
+/* ── Scrollbars ── */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -344,7 +277,7 @@
   scrollbar-width: none;
 }
 
-/* Range input styling (player scrubber + volume) */
+/* ── Range input styling (player scrubber + volume) ── */
 input[type="range"].scrubber {
   -webkit-appearance: none;
   appearance: none;
@@ -412,7 +345,7 @@ input[type="range"].volume::-moz-range-thumb {
   background: var(--color-primary-container);
 }
 
-/* Kinetic orange helpers */
+/* ── Kinetic orange helpers ── */
 .kinetic-orange {
   color: #ff5722;
 }
