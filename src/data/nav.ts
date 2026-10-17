@@ -163,7 +163,7 @@ export const footerNav: NavNode[] = [
     children: [
       { label: "About Musicosy", path: "/about" },
       { label: "Brand Toolkit", path: "/brand-toolkit" },
-      { label: "Jobs & Internships", path: "/careers" },
+      { label: "Careers", path: "/careers" },
       { label: "Investors", path: "/investors" },
       { label: "Status", path: "/status" },
     ],
