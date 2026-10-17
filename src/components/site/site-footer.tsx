@@ -22,12 +22,11 @@ export function SiteFooter() {
   return (
     <footer
       className="mt-auto border-t border-neutral-200 bg-white text-neutral-900"
-      // Force --accent to the Musicosy orange (#F97316 / oklch 0.72 0.19 45)
-      // so the masked logo + link hovers stay orange on every surface —
-      // including the marketing landing, where (marketing)/globals.css
-      // overrides --accent to a dark muted color that would otherwise make
-      // the logo render dark.
-      style={{ "--accent": "oklch(0.72 0.19 45)" } as React.CSSProperties}
+      // Force --accent to BLACK (oklch 0.16 0.008 60 = near-black) so the
+      // masked adnote-logo.png renders as a solid BLACK wordmark on the
+      // white footer — not orange. Per user: "THIS REQUIRES THE BLACK
+      // LOGO NOT THE ORANGE."
+      style={{ "--accent": "oklch(0.16 0.008 60)" } as React.CSSProperties}
     >
       {/* Six-column nav grid — flat, no nesting */}
       <div className="w-full px-6 py-12 lg:px-10">

@@ -49,26 +49,10 @@ const sections = [
 
 export default function Home() {
   const [active, setActive] = useState(0);
-  const [railHidden, setRailHidden] = useState(false);
   const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const footerRef = useRef<HTMLDivElement>(null);
   const vidA = useRef<HTMLVideoElement>(null);
   const vidB = useRef<HTMLVideoElement>(null);
   const [showA, setShowA] = useState(true);
-
-  // Hide the left rail nav when the footer enters the viewport so the
-  // 8 section words stop at the black canvas and don't bleed into the
-  // white footer area.
-  useEffect(() => {
-    const footer = footerRef.current;
-    if (!footer) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setRailHidden(entry.isIntersecting),
-      { rootMargin: "0px 0px -50% 0px" },
-    );
-    io.observe(footer);
-    return () => io.disconnect();
-  }, []);
 
   // Crossfade loop: two videos alternate so the loop seam is a smooth dissolve
   useEffect(() => {
@@ -180,77 +164,79 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Far-left rail — hides when the footer is in view so the
-          8 section words stop at the black canvas instead of bleeding
-          into the white footer. */}
-      <nav
-        aria-label="Sections"
-        className={`fixed left-4 top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-3 transition-opacity duration-300 sm:flex ${
-          railHidden ? "pointer-events-none opacity-0" : "opacity-100"
-        }`}
-      >
-        {sections.map((s, i) => (
-          <a
-            key={s.id}
-            href={`#${s.id}`}
-            className={`flex items-baseline gap-1 font-display text-sm uppercase tracking-[0.28em] transition-colors ${
-              active === i ? "text-primary" : "text-ink-muted hover:text-ink-foreground"
-            }`}
-          >
-            {s.word}
-            <span className="text-primary">+</span>
-          </a>
-        ))}
-      </nav>
-
-      {/* Hero */}
-      <section className="relative flex min-h-screen flex-col justify-end px-5 pb-24 sm:px-10 lg:pl-32">
-        <h1 className="font-display text-[13vw] font-bold leading-[0.85] tracking-tight sm:text-[9vw]">
-          Everything music.
-          <span className="block text-primary">One place.</span>
-        </h1>
-        <p className="mt-6 max-w-md text-lg text-ink-muted">
-          Zero gravity, zero gatekeepers. Scroll down.
-        </p>
-      </section>
-
-      {/* Scrolling block-letter sections */}
-      {sections.map((s, i) => (
-        <section
-          key={s.id}
-          id={s.id}
-          className="relative flex min-h-screen items-center overflow-hidden px-5 sm:px-10 lg:pl-32"
+      {/* Sections wrapper — the left rail nav is INSIDE this wrapper as
+          position: sticky. When the wrapper ends (i.e., when the footer
+          begins), the rail scrolls away naturally with the content instead
+          of staying fixed over the footer. This is the real fix for the
+          rail bleeding into the white footer area — not hiding it. */}
+      <div className="relative flex-1">
+        {/* Far-left rail — sticky so it stays centered while sections
+            scroll past, then scrolls away when the wrapper ends. */}
+        <nav
+          aria-label="Sections"
+          className="sticky top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-3 px-4 sm:flex"
+          style={{ position: "sticky" }}
         >
-          <div className="w-full">
-            <div
-              ref={(el) => {
-                wordRefs.current[i] = el;
-              }}
-              style={{ "--p": 0 } as React.CSSProperties}
-              className="[transform:translateX(calc((1_-_var(--p))_*_60vw))] [opacity:calc(0.15_+_var(--p)_*_0.85)] will-change-transform"
+          {sections.map((s, i) => (
+            <a
+              key={s.id}
+              href={`#${s.id}`}
+              className={`flex items-baseline gap-1 font-display text-sm uppercase tracking-[0.28em] transition-colors ${
+                active === i ? "text-primary" : "text-ink-muted hover:text-ink-foreground"
+              }`}
             >
-              <p className="font-display text-sm uppercase tracking-[0.3em] text-primary">
-                0{i + 1}
-              </p>
-              <h2 className="flex items-baseline gap-2 font-display text-[20vw] font-bold uppercase leading-[0.8] tracking-tighter sm:text-[15vw]">
-                {s.word}
-                <Link href={s.id === "advertise" ? "/advertise" : "/signin"} className="text-[0.35em] font-semibold normal-case tracking-normal text-primary transition-colors hover:text-primary/80">+</Link>
-              </h2>
-            </div>
-            <p className="mt-8 max-w-lg text-lg leading-relaxed text-ink-muted">{s.body}</p>
+              {s.word}
+              <span className="text-primary">+</span>
+            </a>
+          ))}
+        </nav>
 
-          </div>
+        {/* Hero */}
+        <section className="relative flex min-h-screen flex-col justify-end px-5 pb-24 sm:px-10 lg:pl-32">
+          <h1 className="font-display text-[13vw] font-bold leading-[0.85] tracking-tight sm:text-[9vw]">
+            Everything music.
+            <span className="block text-primary">One place.</span>
+          </h1>
+          <p className="mt-6 max-w-md text-lg text-ink-muted">
+            Zero gravity, zero gatekeepers. Scroll down.
+          </p>
         </section>
-      ))}
 
-      {/* Footer — shared SiteFooter component, same as the Help Center
-          pages. White background, dark text, Musicosy orange logo +
-          link hovers. Stops the full-bleed background video where the
-          footer starts. The wrapper div lets us observe when the
-          footer enters the viewport so we can hide the left rail nav. */}
-      <div ref={footerRef} className="relative z-20">
-        <SiteFooter />
+        {/* Scrolling block-letter sections */}
+        {sections.map((s, i) => (
+          <section
+            key={s.id}
+            id={s.id}
+            className="relative flex min-h-screen items-center overflow-hidden px-5 sm:px-10 lg:pl-32"
+          >
+            <div className="w-full">
+              <div
+                ref={(el) => {
+                  wordRefs.current[i] = el;
+                }}
+                style={{ "--p": 0 } as React.CSSProperties}
+                className="[transform:translateX(calc((1_-_var(--p))_*_60vw))] [opacity:calc(0.15_+_var(--p)_*_0.85)] will-change-transform"
+              >
+                <p className="font-display text-sm uppercase tracking-[0.3em] text-primary">
+                  0{i + 1}
+                </p>
+                <h2 className="flex items-baseline gap-2 font-display text-[20vw] font-bold uppercase leading-[0.8] tracking-tighter sm:text-[15vw]">
+                  {s.word}
+                  <Link href={s.id === "advertise" ? "/advertise" : "/signin"} className="text-[0.35em] font-semibold normal-case tracking-normal text-primary transition-colors hover:text-primary/80">+</Link>
+                </h2>
+              </div>
+              <p className="mt-8 max-w-lg text-lg leading-relaxed text-ink-muted">{s.body}</p>
+
+            </div>
+          </section>
+        ))}
       </div>
+
+      {/* Footer — shared SiteFooter component. White background, BLACK
+          Musicosy logo (not orange), same component as the Help Center
+          pages. The rail nav scrolls away naturally before the footer
+          begins because it's sticky inside the sections wrapper above. */}
+      <SiteFooter />
     </div>
   );
 }
