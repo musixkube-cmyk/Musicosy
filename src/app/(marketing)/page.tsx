@@ -148,8 +148,8 @@ export default function Home() {
         >
           <source src="/video-canvas.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-ink/60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/70 via-ink/40 to-ink/15" />
+        <div className="absolute inset-0 bg-ink/75" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/50 to-ink/25" />
       </div>
 
       {/* Top bar */}
