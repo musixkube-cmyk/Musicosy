@@ -137,6 +137,7 @@ export default function Home() {
           preload="auto"
           poster="/sample-design.png"
           aria-hidden="true"
+          onError={() => { if (vidA.current) vidA.current.style.display = "none"; }}
         >
           <source src="/astronaut.mp4" type="video/mp4" />
         </video>
@@ -149,6 +150,7 @@ export default function Home() {
           preload="auto"
           poster="/sample-design2.png"
           aria-hidden="true"
+          onError={() => { if (vidB.current) vidB.current.style.display = "none"; }}
         >
           <source src="/astronaut.mp4" type="video/mp4" />
         </video>
