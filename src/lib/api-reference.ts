@@ -112,7 +112,7 @@ export const sidebarTree: SidebarGroup[] = [
     items: api.gettingStarted.map((p) => ({
       type: "link" as const,
       label: p.title,
-      href: `/developers/developers/docs/getting-started/${p.slug}`,
+      href: `/developers/getting-started/${p.slug}`,
     })),
   },
   {
@@ -120,7 +120,7 @@ export const sidebarTree: SidebarGroup[] = [
     items: api.guides.map((p) => ({
       type: "link" as const,
       label: p.title,
-      href: `/developers/developers/docs/guides/${p.slug}`,
+      href: `/developers/guides/${p.slug}`,
     })),
   },
   {
@@ -128,11 +128,11 @@ export const sidebarTree: SidebarGroup[] = [
     items: api.domains.map((d) => ({
       type: "group" as const,
       label: d.name,
-      href: `/developers/developers/docs/api-reference/${d.slug}`,
+      href: `/developers/api-reference/${d.slug}`,
       children: d.resources.map((r) => ({
         type: "link" as const,
         label: r.name,
-        href: `/developers/developers/docs/api-reference/${d.slug}/${r.slug}`,
+        href: `/developers/api-reference/${d.slug}/${r.slug}`,
       })),
     })),
   },
@@ -142,17 +142,17 @@ export const sidebarTree: SidebarGroup[] = [
       {
         type: "link" as const,
         label: "UI Components",
-        href: "/developers/developers/docs/appendices/ui-components",
+        href: "/developers/appendices/ui-components",
       },
       {
         type: "link" as const,
         label: "Modals",
-        href: "/developers/developers/docs/appendices/modals",
+        href: "/developers/appendices/modals",
       },
       {
         type: "link" as const,
         label: "Feature Index",
-        href: "/developers/developers/docs/appendices/feature-index",
+        href: "/developers/appendices/feature-index",
       },
     ],
   },

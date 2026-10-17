@@ -28,7 +28,7 @@ const SURFACES = [
     eyebrow: "Support",
     label: "Help Center",
     body: "Guides, policies, transparency reports, and escalation paths.",
-    href: "/help",
+    href: "/resources/help-center",
     cta: "Open help",
   },
   {

@@ -75,7 +75,6 @@ import { continueListeningDoc } from "./continue-listening";
 import { sendMessageDoc } from "./send-a-message";
 import { manageMessageRequestsDoc } from "./manage-message-requests";
 import { startAGroupConversationDoc } from "./start-a-group-conversation";
-import { takeItDownActDoc } from "./take-it-down-act";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -143,7 +142,6 @@ const docs: Record<string, Doc> = {
   [sendMessageDoc.path]: sendMessageDoc,
   [manageMessageRequestsDoc.path]: manageMessageRequestsDoc,
   [startAGroupConversationDoc.path]: startAGroupConversationDoc,
-  [takeItDownActDoc.path]: takeItDownActDoc,
 };
 
 /** Look up structured doc content for a given route path. */

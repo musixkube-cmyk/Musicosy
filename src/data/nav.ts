@@ -196,7 +196,7 @@ export const footerUtilityBar: NavNode[] = [
   { label: "Sync", path: "/for-sync-agents" },
   { label: "Developers", path: "/developers" },
   { label: "News", path: "/resources/blog" },
-  { label: "US TIDA", path: "/privacy-and-safety/take-it-down-act" },
+  { label: "US TIDA", path: "/us-tida" },
   { label: "Sign In", path: "/support/sign-in" },
   { label: "Contact Us", path: "/support/contact-us" },
 ];
@@ -365,12 +365,6 @@ export const helpCenterSections: NavNode[] = [
           "Copyright transparency",
           "Advertising transparency",
         ]),
-      },
-      {
-        label: "Take It Down Act (TIDA)",
-        path: "/privacy-and-safety/take-it-down-act",
-        blurb:
-          "Federal law requiring removal of nonconsensual intimate imagery and deepfakes within 48 hours. Enforced by the FTC; active since May 2026.",
       },
     ],
   },

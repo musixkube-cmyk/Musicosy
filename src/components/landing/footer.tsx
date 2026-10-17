@@ -21,7 +21,7 @@ const FOOTER_COLUMNS: {
       { label: "Social", href: "/social" },
       { label: "Ad Center", href: "/ads" },
       { label: "Developers", href: "/developers" },
-      { label: "Help Center", href: "/help" },
+      { label: "Help Center", href: "/resources/help-center" },
     ],
   },
   {

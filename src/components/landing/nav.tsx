@@ -16,7 +16,7 @@ import { Logo } from "./logo";
  */
 const NAV_LINKS: { label: string; href: string; description: string }[] = [
   { label: "Social", href: "/social", description: "Listen, watch, follow, share" },
-  { label: "Help", href: "/help", description: "Guides, policies, support" },
+  { label: "Help", href: "/resources/help-center", description: "Guides, policies, support" },
   { label: "Developers", href: "/developers", description: "API reference & dashboard" },
   { label: "Ad Center", href: "/ads", description: "Run advertising campaigns" },
 ];
