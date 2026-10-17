@@ -1,17 +1,42 @@
 import { footerNav, footerUtilityBar, footerBottomRail } from "@/data/nav";
 import { NavLink } from "@/components/site/nav-link";
 
+/**
+ * Site footer — shared across every public surface.
+ *
+ * White background + dark text — explicit Tailwind colors (not CSS vars)
+ * so the footer renders identically on both the dark marketing landing
+ * and the light help center pages. The marketing page's full-bleed
+ * video background stops where the footer starts.
+ *
+ * Layout (top → bottom):
+ *   1. Six-column nav grid (Help Center / Support / Trust / Legal / Resources / For Industry)
+ *   2. Musicosy logo (right-aligned, masked adnote-logo.png in --accent color)
+ *   3. Utility bar (16 quick-access links)
+ *   4. Bottom rail (© 2026 Musicosy Corp. + 8 legal links + language)
+ *
+ * Logo asset is unchanged — `public/adnote-logo.png` masked with the
+ * Musicosy orange `--accent` token so the brand mark stays consistent.
+ */
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-ink text-ink-foreground">
+    <footer
+      className="mt-auto border-t border-neutral-200 bg-white text-neutral-900"
+      // Force --accent to the Musicosy orange (#F97316 / oklch 0.72 0.19 45)
+      // so the masked logo + link hovers stay orange on every surface —
+      // including the marketing landing, where (marketing)/globals.css
+      // overrides --accent to a dark muted color that would otherwise make
+      // the logo render dark.
+      style={{ "--accent": "oklch(0.72 0.19 45)" } as React.CSSProperties}
+    >
       {/* Six-column nav grid — flat, no nesting */}
-      <div className="w-full px-6 lg:px-10 py-12">
+      <div className="w-full px-6 py-12 lg:px-10">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
           {footerNav.map((group) => (
             <div key={group.label + group.path}>
               <NavLink
                 href={group.path}
-                className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-ink-foreground/50 transition-colors hover:text-accent"
+                className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-neutral-500 transition-colors hover:text-accent"
               >
                 {group.label}
               </NavLink>
@@ -20,7 +45,7 @@ export function SiteFooter() {
                   <li key={child.label + child.path}>
                     <NavLink
                       href={child.path}
-                      className="text-sm text-ink-foreground/80 transition-colors hover:text-accent"
+                      className="text-sm text-neutral-700 transition-colors hover:text-accent"
                     >
                       {child.label}
                     </NavLink>
@@ -32,8 +57,10 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* Logo — right-aligned, above the utility bar */}
-      <div className="w-full px-6 lg:px-10 pb-6">
+      {/* Logo — right-aligned, above the utility bar.
+          Masked adnote-logo.png renders in the Musicosy orange (--accent)
+          so it shows as a solid orange wordmark on the white footer. */}
+      <div className="w-full px-6 pb-6 lg:px-10">
         <div className="flex justify-end">
           <div
             role="img"
@@ -55,7 +82,7 @@ export function SiteFooter() {
       </div>
 
       {/* Utility bar — dense quick-access strip below the logo */}
-      <div className="border-t border-ink-foreground/10 px-6 lg:px-10 py-4">
+      <div className="border-t border-neutral-200 px-6 py-4 lg:px-10">
         <nav
           aria-label="Footer utility"
           className="flex flex-wrap items-center gap-x-5 gap-y-2"
@@ -64,7 +91,7 @@ export function SiteFooter() {
             <NavLink
               key={item.label + item.path}
               href={item.path}
-              className="text-xs font-medium uppercase tracking-wider text-ink-foreground/60 transition-colors hover:text-accent"
+              className="text-xs font-medium uppercase tracking-wider text-neutral-500 transition-colors hover:text-accent"
             >
               {item.label}
             </NavLink>
@@ -72,21 +99,21 @@ export function SiteFooter() {
         </nav>
       </div>
 
-      {/* Bottom rail — copyright + 8 legal/policy links + language, beneath the separating line */}
-      <div className="border-t border-ink-foreground/10 px-6 lg:px-10 py-5">
-        <div className="flex flex-col gap-3 text-xs text-ink-foreground/50 sm:flex-row sm:items-center sm:justify-between">
+      {/* Bottom rail — copyright + 8 legal/policy links + language */}
+      <div className="border-t border-neutral-200 px-6 py-5 lg:px-10">
+        <div className="flex flex-col gap-3 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
           <span>© 2026 Musicosy Corp.</span>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
             {footerBottomRail.map((item) => (
               <NavLink
                 key={item.label + item.path}
                 href={item.path}
-                className="transition-colors hover:text-ink-foreground"
+                className="transition-colors hover:text-neutral-900"
               >
                 {item.label}
               </NavLink>
             ))}
-            <span className="cursor-pointer transition-colors hover:text-ink-foreground">English</span>
+            <span className="cursor-pointer transition-colors hover:text-neutral-900">English</span>
           </div>
         </div>
       </div>
