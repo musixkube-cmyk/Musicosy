@@ -139,13 +139,13 @@ export const footerNav: NavNode[] = [
     ],
   },
   {
-    label: "For the Music Industry",
+    label: "Industry",
     path: "/for-creators",
     children: [
-      { label: "For Creators", path: "/for-creators" },
-      { label: "For Labels", path: "/for-labels" },
-      { label: "For Distributors", path: "/for-distributors" },
-      { label: "For Sync Agents", path: "/for-sync-agents" },
+      { label: "Creators", path: "/for-creators" },
+      { label: "Labels", path: "/for-labels" },
+      { label: "Distributors", path: "/for-distributors" },
+      { label: "Sync agents", path: "/for-sync-agents" },
     ],
   },
   {
@@ -454,14 +454,14 @@ export const helpCenterSections: NavNode[] = [
 
   // ── 5. For the Music Industry ────────────────────────────────────────────
   {
-    label: "For the Music Industry",
+    label: "Industry",
     path: "/for-creators",
     blurb: "Portals for creators, labels, distributors, and sync agents.",
     children: [
-      { label: "For Creators", path: "/for-creators" },
-      { label: "For Labels", path: "/for-labels" },
-      { label: "For Distributors", path: "/for-distributors" },
-      { label: "For Sync Agents", path: "/for-sync-agents" },
+      { label: "Creators", path: "/for-creators" },
+      { label: "Labels", path: "/for-labels" },
+      { label: "Distributors", path: "/for-distributors" },
+      { label: "Sync agents", path: "/for-sync-agents" },
       { label: "Creator resources", path: "/for-creators/creator-resources" },
       { label: "Label resources", path: "/for-labels/label-resources" },
       { label: "Distribution resources", path: "/for-distributors/distribution-resources" },
