@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useShell } from "../../state/app-shell";
 import { Icon, useIsActive } from "../ui-kit";
 import { CONVERSATIONS, NOTIFICATIONS } from "../../data/demo";
+import { useCanvasToggle } from "@/app/app/layout";
 
 const PRIMARY: { to: string; label: string; icon: string }[] = [
   { to: "/", label: "Home", icon: "home" },
@@ -17,6 +18,7 @@ const PRIMARY: { to: string; label: string; icon: string }[] = [
 
 export function TopRail() {
   const { searchOpen, setSearchOpen, memberContext, setMemberContext } = useShell();
+  const { light, toggle } = useCanvasToggle();
   const unreadInbox = CONVERSATIONS.reduce((n, c) => n + c.unread, 0);
   const unreadAlerts = NOTIFICATIONS.filter((n) => n.unread).length;
 
@@ -50,6 +52,16 @@ export function TopRail() {
       </nav>
 
       <div className="ml-auto flex shrink-0 items-center gap-1">
+        {/* Canvas toggle — switches between black and white canvas */}
+        <button
+          type="button"
+          onClick={toggle}
+          aria-label={light ? "Switch to dark canvas" : "Switch to light canvas"}
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-surface-container-highest text-on-surface-variant transition-colors hover:border-primary-container hover:text-primary-container"
+        >
+          <Icon name={light ? "dark_mode" : "light_mode"} size={18} filled />
+        </button>
+
         <button
           type="button"
           onClick={() =>
