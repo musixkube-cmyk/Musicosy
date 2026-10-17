@@ -21,7 +21,7 @@ import { NavLink } from "@/components/site/nav-link";
 export function SiteFooter() {
   return (
     <footer
-      className="mt-auto border-t border-neutral-200 bg-white text-neutral-900"
+      className="relative z-10 mt-auto border-t border-neutral-200 bg-white text-neutral-900"
       // Force --accent to BLACK (oklch 0.16 0.008 60 = near-black) so the
       // masked adnote-logo.png renders as a solid BLACK wordmark on the
       // white footer — not orange. Per user: "THIS REQUIRES THE BLACK
