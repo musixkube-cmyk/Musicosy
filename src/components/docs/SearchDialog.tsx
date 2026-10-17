@@ -61,7 +61,7 @@ export function SearchDialog() {
                   onSelect={() => {
                     setOpen(false);
                     setQuery("");
-                    router.push(`/developers/${hit.sectionSlug}/${hit.slug}`);
+                    router.push(`/docs/${hit.sectionSlug}/${hit.slug}`);
                   }}
                   className="flex flex-col items-start gap-0.5"
                 >

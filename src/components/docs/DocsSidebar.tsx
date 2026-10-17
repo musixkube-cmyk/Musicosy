@@ -59,7 +59,7 @@ export function DocsSidebar({ onNavigate }: { onNavigate?: () => void }) {
     setOpenGroups((s) => ({ ...s, [key]: !s[key] }));
 
   const isActive = (href: string) => {
-    if (href === "/developers") return pathname === "/developers";
+    if (href === "/docs") return pathname === "/docs";
     return pathname === href || pathname.startsWith(href + "/");
   };
 

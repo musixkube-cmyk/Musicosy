@@ -10,10 +10,10 @@ import { GetKeyCta } from "@/components/docs/GetKeyCta";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { href: "/developers", label: "Docs" },
-  { href: "/developers/getting-started/quickstart", label: "Getting Started" },
-  { href: "/developers/api-reference", label: "API Reference" },
-  { href: "/developers/appendices/feature-index", label: "Feature Index" },
+  { href: "/docs", label: "Docs" },
+  { href: "/docs/getting-started/quickstart", label: "Getting Started" },
+  { href: "/docs/api-reference", label: "API Reference" },
+  { href: "/docs/appendices/feature-index", label: "Feature Index" },
 ] as const;
 
 export function DocsShell({ children }: { children: React.ReactNode }) {
@@ -35,8 +35,8 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
           <nav className="ml-6 hidden items-center gap-5 md:flex">
             {NAV_LINKS.map((link) => {
               const active =
-                link.href === "/developers"
-                  ? pathname === "/developers" || pathname.startsWith("/developers/")
+                link.href === "/docs"
+                  ? pathname === "/docs" || pathname.startsWith("/docs/")
                   : pathname.startsWith(link.href);
               return (
                 <Link

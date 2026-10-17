@@ -194,7 +194,7 @@ export const footerUtilityBar: NavNode[] = [
   { label: "Fans", path: "/for-fans" },
   { label: "Distributors", path: "/for-distributors" },
   { label: "Sync", path: "/for-sync-agents" },
-  { label: "Developers", path: "/developers" },
+  { label: "Developers", path: "/docs" },
   { label: "News", path: "/resources/blog" },
   { label: "US TIDA", path: "/us-tida" },
   { label: "Sign In", path: "/support/sign-in" },

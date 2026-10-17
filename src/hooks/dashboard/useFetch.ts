@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect -- this hook deliberately calls setState inside useEffect for client-side data fetching. The async setState calls in .then()/.catch() are not synchronous; the rule can't always tell. */
 
 import { useCallback, useEffect, useState } from "react";
 

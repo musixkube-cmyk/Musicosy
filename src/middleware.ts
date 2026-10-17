@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/lib/supabase/env";
 
 /**
- * Musicosy auth middleware — protects all three portals' dashboard routes.
+ * Musicosy auth middleware — protects the portal dashboard routes.
  *
  * Three responsibilities:
  *
@@ -12,9 +12,8 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/lib/supabase/env";
  * 2. Guard each portal's dashboard routes — if the user has no session,
  *    redirect to that portal's signin page with ?next=<original-path> so we
  *    can resume after they auth:
- *      /developers/dashboard/* → /developers/signin
- *      /dashboard/*            → /signin
- *      /ads/*                 → /ads/signin
+ *      /dashboard/*  → /signin   (developer portal)
+ *      /ads/*        → /ads/signin
  * 3. Bounce logged-in users away from each portal's signin page so they don't
  *    get stuck re-authenticating when they already have a valid session.
  *
@@ -24,9 +23,9 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/lib/supabase/env";
  * keeps the rest of the site (home, help center, docs) working while
  * Supabase is being wired up.
  *
- * The matcher is scoped to ONLY the three portals' auth-gated routes — so
- * this middleware never runs on the rest of the site's routes (home, docs,
- * help center, advertising landing pages).
+ * The matcher is scoped to ONLY the portals' auth-gated routes — so this
+ * middleware never runs on the rest of the site's routes (home, docs,
+ * help center, advertising landing pages, consumer /app/* canvas).
  */
 export async function middleware(request: NextRequest) {
   // Graceful skip when Supabase isn't configured — don't crash the site.
@@ -50,8 +49,7 @@ export async function middleware(request: NextRequest) {
   // Returns the matching signin path for a gated dashboard, or null if the
   // path isn't auth-gated.
   function signinFor(path: string): string | null {
-    if (path.startsWith("/developers/dashboard")) return "/developers/signin";
-    // Marketing dashboard — but NOT /developers/dashboard/* (handled above)
+    // Developer portal dashboard
     if (path.startsWith("/dashboard")) return "/signin";
     // Ads portal — everything under /ads except /ads/signin itself and /ads/auth/*
     if (path.startsWith("/ads") && !path.startsWith("/ads/signin") && !path.startsWith("/ads/auth")) {
@@ -62,7 +60,6 @@ export async function middleware(request: NextRequest) {
 
   // Returns the matching signin path if the request IS a signin page, else null.
   function signinPath(path: string): string | null {
-    if (path === "/developers/signin") return "/developers/signin";
     if (path === "/signin") return "/signin";
     if (path === "/ads/signin") return "/ads/signin";
     return null;
@@ -80,11 +77,8 @@ export async function middleware(request: NextRequest) {
   // --- Bounce logged-in users away from signin pages ---
   const onSignin = signinPath(pathname);
   if (user && onSignin) {
-    // Redirect to the portal's dashboard (drop ?next= since they're already authed)
     const url = request.nextUrl.clone();
-    if (onSignin === "/developers/signin") {
-      url.pathname = "/developers/dashboard";
-    } else if (onSignin === "/signin") {
+    if (onSignin === "/signin") {
       url.pathname = "/dashboard";
     } else if (onSignin === "/ads/signin") {
       url.pathname = "/ads";
@@ -99,15 +93,9 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Developer portal
-    "/developers/dashboard/:path*",
-    "/developers/signin",
-    // Marketing portal
     "/dashboard/:path*",
     "/signin",
-    // Ads portal — match /ads/* but exclude /ads/signin and /ads/auth/* via
-    // the matcher's negative-lookahead-style syntax. Next.js matchers use
-    // a simplified regex; we use a single positive matcher and let the
-    // handler above decide whether to gate.
+    // Ads portal
     "/ads/:path*",
   ],
 };
