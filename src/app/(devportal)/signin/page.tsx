@@ -47,6 +47,10 @@ export default function SignInPage() {
   // --- Phone OTP ---
   async function sendOtp() {
     setError(null);
+    if (!supabase) {
+      setError("Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env");
+      return;
+    }
     const { error } = await supabase.auth.signInWithOtp({
       phone: phone.trim(),
       options: { shouldCreateUser: true },
@@ -60,6 +64,10 @@ export default function SignInPage() {
 
   async function verifyOtp() {
     setError(null);
+    if (!supabase) {
+      setError("Supabase is not configured.");
+      return;
+    }
     const { error } = await supabase.auth.verifyOtp({
       phone: phone.trim(),
       token: otpCode.trim(),
@@ -75,6 +83,10 @@ export default function SignInPage() {
   // --- OAuth ---
   async function oauth(provider: "google" | "apple") {
     setError(null);
+    if (!supabase) {
+      setError("Supabase is not configured.");
+      return;
+    }
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
@@ -87,6 +99,10 @@ export default function SignInPage() {
   // --- Email + password ---
   async function signInWithEmail() {
     setError(null);
+    if (!supabase) {
+      setError("Supabase is not configured.");
+      return;
+    }
     const { error } = await supabase.auth.signInWithPassword({
       email: email.trim(),
       password,
