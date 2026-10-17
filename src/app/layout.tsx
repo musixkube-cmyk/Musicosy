@@ -1,17 +1,15 @@
 import { Toaster } from "@/components/ui/toaster";
+import "./globals.css";
 
 /**
- * ROOT LAYOUT — intentionally minimal.
+ * ROOT LAYOUT — applies the Musicosy design system to every surface.
  *
- * No fonts, no globals.css, no metadata. Each route group owns its own
- * design system:
- *   - `(public)/layout.tsx`    → Bebas Neue + Barlow + Help Center globals.css
- *   - `(marketing)/layout.tsx` → Questrial + DM Sans + landing globals.css
- *   - `(ads)/layout.tsx`       → DM Sans + landing globals.css (same dark surface)
- *   - `(payload)/layout.tsx`   → Payload admin (handled separately)
+ * Imports globals.css at the root so the design tokens (background, foreground,
+ * accent, border, etc.) are available everywhere — landing, ad center, social,
+ * help center, developers, signin/signup.
  *
- * The only thing the root provides is <html><body> and the Toaster (which
- * needs to mount once at the top so toast notifications work everywhere).
+ * Per-route-group layouts may still layer their own fonts or dark-mode
+ * overrides on top, but the base token set lives here.
  */
 export default function RootLayout({
   children,
@@ -20,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased">
+      <body className="antialiased bg-background text-foreground">
         {children}
         <Toaster />
       </body>
