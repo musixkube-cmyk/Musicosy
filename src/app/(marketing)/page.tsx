@@ -50,47 +50,6 @@ const sections = [
 export default function Home() {
   const [active, setActive] = useState(0);
   const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const vidA = useRef<HTMLVideoElement>(null);
-  const vidB = useRef<HTMLVideoElement>(null);
-  const [showA, setShowA] = useState(true);
-
-  // Crossfade loop: two videos alternate so the loop seam is a smooth dissolve
-  useEffect(() => {
-    const DURATION = 10; // video length in seconds
-    const FADE_START = 8; // start fading at this second
-    const FADE_MS = (DURATION - FADE_START) * 1000;
-
-    const lead = showA ? vidA : vidB;
-    const lag = showA ? vidB : vidA;
-
-    // When lead video hits FADE_START, start the lag video and crossfade
-    function onTimeUpdate() {
-      if (!lead.current || lead.current.currentTime < FADE_START) return;
-      lead.current.removeEventListener("timeupdate", onTimeUpdate);
-
-      if (lag.current) {
-        lag.current.currentTime = 0;
-        lag.current.play();
-      }
-      // CSS transition handles the opacity crossfade
-      setShowA(!showA);
-
-      // After the fade completes, reset the hidden video so it's ready next cycle
-      setTimeout(() => {
-        if (lead.current) {
-          lead.current.pause();
-          lead.current.currentTime = 0;
-        }
-      }, FADE_MS + 200);
-    }
-
-    if (lead.current) {
-      lead.current.addEventListener("timeupdate", onTimeUpdate);
-    }
-    return () => {
-      if (lead.current) lead.current.removeEventListener("timeupdate", onTimeUpdate);
-    };
-  }, [showA]);
 
   useEffect(() => {
     let frame = 0;
@@ -123,34 +82,19 @@ export default function Home() {
 
   return (
     <div className="relative flex min-h-screen flex-col text-ink-foreground">
-      {/* Full-bleed background video — crossfade loop.
-          If the video can't load (unsupported codec, network, etc.),
-          the poster image shows instead and no error is thrown. */}
+      {/* Full-bleed background video — single looping video that rotates
+          at all times and never times out. */}
       <div className="fixed inset-0 z-0">
         <video
-          ref={vidA}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ${showA ? "opacity-100" : "opacity-0"}`}
+          className="absolute inset-0 h-full w-full object-cover"
           autoPlay
           muted
           loop
           playsInline
           preload="auto"
           aria-hidden="true"
-          onError={() => { if (vidA.current) vidA.current.style.display = "none"; }}
         >
-          <source src="/astronaut.mp4" type="video/mp4" />
-        </video>
-        <video
-          ref={vidB}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ${showA ? "opacity-0" : "opacity-100"}`}
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-          onError={() => { if (vidB.current) vidB.current.style.display = "none"; }}
-        >
-          <source src="/astronaut.mp4" type="video/mp4" />
+          <source src="/video-canvas.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-ink/60" />
         <div className="absolute inset-0 bg-gradient-to-r from-ink/70 via-ink/40 to-ink/15" />

@@ -10,55 +10,58 @@ import { NavLink } from "@/components/site/nav-link";
  * video background stops where the footer starts.
  *
  * Layout (top → bottom):
- *   1. Six-column nav grid (Help Center / Support / Trust / Legal / Resources / For Industry)
- *   2. Musicosy logo (right-aligned, masked adnote-logo.png in --accent color)
- *   3. Utility bar (16 quick-access links)
- *   4. Bottom rail (© 2026 Musicosy Corp. + 8 legal links + language)
- *
- * Logo asset is unchanged — `public/adnote-logo.png` masked with the
- * Musicosy orange `--accent` token so the brand mark stays consistent.
+ *   1. Product image (hangs left) + six-column nav grid
+ *   2. Musicosy logo (right-aligned, masked adnote-logo.png in --accent)
+ *   3. Utility bar (6 quick-access links)
+ *   4. Bottom rail (© 2026 Musicosy Corp. + 5 legal links + English)
  */
 export function SiteFooter() {
   return (
     <footer
       className="relative z-10 mt-auto border-t border-neutral-200 bg-white text-neutral-900"
-      // Force --accent to BLACK (oklch 0.16 0.008 60 = near-black) so the
-      // masked adnote-logo.png renders as a solid BLACK wordmark on the
-      // white footer — not orange. Per user: "THIS REQUIRES THE BLACK
-      // LOGO NOT THE ORANGE."
       style={{ "--accent": "oklch(0.16 0.008 60)" } as React.CSSProperties}
     >
-      {/* Six-column nav grid — flat, no nesting */}
+      {/* Product image + six-column nav grid */}
       <div className="w-full px-6 py-12 lg:px-10">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
-          {footerNav.map((group) => (
-            <div key={group.label + group.path}>
-              <NavLink
-                href={group.path}
-                className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-neutral-500 transition-colors hover:text-accent"
-              >
-                {group.label}
-              </NavLink>
-              <ul className="mt-4 space-y-2.5">
-                {(group.children ?? []).map((child) => (
-                  <li key={child.label + child.path}>
-                    <NavLink
-                      href={child.path}
-                      className="text-sm text-neutral-700 transition-colors hover:text-accent"
-                    >
-                      {child.label}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div className="flex gap-10">
+          {/* Product image — hangs left */}
+          <div className="hidden shrink-0 lg:block">
+            <img
+              src="/footer-bg.png"
+              alt="Musicosy headphones"
+              className="h-48 w-auto object-contain"
+            />
+          </div>
+
+          {/* Six-column nav grid */}
+          <div className="grid flex-1 grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
+            {footerNav.map((group) => (
+              <div key={group.label + group.path}>
+                <NavLink
+                  href={group.path}
+                  className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-neutral-500 transition-colors hover:text-accent"
+                >
+                  {group.label}
+                </NavLink>
+                <ul className="mt-4 space-y-2.5">
+                  {(group.children ?? []).map((child) => (
+                    <li key={child.label + child.path}>
+                      <NavLink
+                        href={child.path}
+                        className="text-sm text-neutral-700 transition-colors hover:text-accent"
+                      >
+                        {child.label}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Logo — right-aligned, above the utility bar.
-          Masked adnote-logo.png renders in the Musicosy orange (--accent)
-          so it shows as a solid orange wordmark on the white footer. */}
+      {/* Logo — right-aligned, above the utility bar */}
       <div className="w-full px-6 pb-6 lg:px-10">
         <div className="flex justify-end">
           <div
@@ -80,7 +83,7 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* Utility bar — dense quick-access strip below the logo */}
+      {/* Utility bar — 6 quick-access links */}
       <div className="border-t border-neutral-200 px-6 py-4 lg:px-10">
         <nav
           aria-label="Footer utility"
@@ -98,7 +101,7 @@ export function SiteFooter() {
         </nav>
       </div>
 
-      {/* Bottom rail — copyright + 8 legal/policy links + language */}
+      {/* Bottom rail — © 2026 Musicosy Corp. + 5 legal links + English */}
       <div className="border-t border-neutral-200 px-6 py-5 lg:px-10">
         <div className="flex flex-col gap-3 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
           <span>© 2026 Musicosy Corp.</span>

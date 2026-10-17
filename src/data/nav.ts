@@ -115,7 +115,6 @@ export const footerNav: NavNode[] = [
       { label: "Support Center", path: "/support" },
       { label: "Account & Access", path: "/support/account-and-access" },
       { label: "New User FAQ", path: "/resources/new-user-faq" },
-      { label: "Sign In", path: "/support/sign-in" },
       { label: "Email Preference Center", path: "/support/email-preferences" },
       { label: "Contact Us", path: "/support/contact-us" },
     ],
@@ -124,10 +123,8 @@ export const footerNav: NavNode[] = [
     label: "Resources",
     path: "/resources",
     children: [
-      { label: "Resources Home", path: "/resources" },
       { label: "Resources & Guides", path: "/resources/guides" },
       { label: "Glossary", path: "/resources/glossary" },
-      { label: "Accessibility", path: "/resources/accessibility" },
       { label: "Company News", path: "/resources/blog" },
     ],
   },
@@ -169,7 +166,6 @@ export const footerNav: NavNode[] = [
       { label: "Jobs & Internships", path: "/careers" },
       { label: "Investors", path: "/investors" },
       { label: "Status", path: "/status" },
-      { label: "Download the App", path: "/download" },
     ],
   },
 ];
@@ -180,25 +176,12 @@ export const footerNav: NavNode[] = [
  * destination links (16). The legal/policy links live in footerBottomRail.
  */
 export const footerUtilityBar: NavNode[] = [
-  { label: "About", path: "/about" },
   { label: "Get App", path: "/download" },
-  { label: "Help", path: "/resources/help-center" },
-  { label: "Careers", path: "/careers" },
-  // Footer "Ads & Business" routes to /advertise — the real Ad Center gate
-  // (combined sign-in + sign-up with Google/Apple OAuth) imported from the
-  // landing-home repo. Not /ads/signin.
-  { label: "Ads & Business", path: "/advertise" },
-  { label: "Podcast", path: "/podcast" },
   { label: "Stream", path: "/for-fans" },
-  { label: "Creators", path: "/for-creators" },
-  { label: "Fans", path: "/for-fans" },
-  { label: "Distributors", path: "/for-distributors" },
-  { label: "Sync", path: "/for-sync-agents" },
+  { label: "Podcast", path: "/podcast" },
   { label: "Developers", path: "/docs" },
-  { label: "News", path: "/resources/blog" },
   { label: "US TIDA", path: "/us-tida" },
   { label: "Sign In", path: "/support/sign-in" },
-  { label: "Contact Us", path: "/support/contact-us" },
 ];
 
 /**
@@ -208,13 +191,10 @@ export const footerUtilityBar: NavNode[] = [
  */
 export const footerBottomRail: NavNode[] = [
   { label: "Terms", path: "/legal-and-policies" },
-  { label: "Privacy", path: "/privacy-and-safety" },
+  { label: "Privacy", path: "/legal-and-policies/privacy" },
   { label: "Cookies", path: "/legal-and-policies" },
   { label: "DMCA", path: "/legal-and-policies/copyright-and-ip/dmca-policy" },
   { label: "Accessibility", path: "/resources/accessibility" },
-  { label: "Privacy Center", path: "/legal-and-policies/privacy" },
-  { label: "Legal Center", path: "/legal-and-policies" },
-  { label: "Support Center", path: "/support" },
 ];
 
 /**
